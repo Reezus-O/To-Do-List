@@ -1,30 +1,46 @@
-let toDo = document.querySelector(".to-do")
-let add = document.querySelector(".add-button")
-let list = document.querySelector(".to-do-list")
+let toDo = document.querySelector(".to-do");
+let add = document.querySelector(".add-btn");
+let list = document.querySelector(".to-do-list");
+let date = document.querySelector(".to-do-date");
+let deleteBtn = document.querySelector(".delete-btn");
 let toDoList = [];
 let html;
 
-function fillList(item, array) {
-    array.push(item)
-    let listHtml = ""; /*Note: this resets the list, so everytime the function is called, the list gets reset and a new list is built from scratch */
+function renderList(array) {
+    let listHtml = "";
     for (let i = 0; i < array.length; i++) {
-        let content = array[i]
-        html = `<p>${content}</p>`
-        listHtml = listHtml + html
+        let { itemName, itemDate } = array[i];
+        html = `<p class="to-do-items">${itemName}</p>
+            <p class="to-do-items">${itemDate}</p>
+            <button class="delete-btn" onclick="deleteItem(${i})">Delete</button>`;
+        listHtml += html;
     }
-    list.innerHTML = listHtml
-    toDo.value = ""
-    console.log(listHtml)
+    list.innerHTML = listHtml;
+}
+
+function deleteItem(index) {
+    toDoList.splice(index, 1);
+    renderList(toDoList);
+}
+
+function fillList(itemName, itemDate) {
+    let toDoObject = {
+        itemName,
+        itemDate,
+    };
+    toDoList.push(toDoObject);
+    renderList(toDoList);
+    toDo.value = "";
+    date.value = "";
+    console.log(toDoList);
 }
 
 add.addEventListener("click", function () {
-    fillList(toDo.value, toDoList)
-})
+    fillList(toDo.value, date.value);
+});
 
 document.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-        fillList(toDo.value, toDoList)
-    } else {
-
+        fillList(toDo.value, date.value);
     }
-})
+});
